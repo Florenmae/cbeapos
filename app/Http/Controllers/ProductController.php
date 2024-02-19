@@ -30,24 +30,24 @@ class ProductController extends Controller{
 
     $productSaved = $newProduct->save();
 
-        if ($newProduct->status == 1) {
-            $transaction = new Transaction();
-            $transaction->productId = $newProduct->productId;
-            $transaction->supplierId = $newProduct->supplierId;
-            $transaction->description = $newProduct->description;
-            $transaction->qty = $newProduct->qty;
-            $transaction->approved_by = $newProduct->approved_by;
+    //     if ($newProduct->status == 1) {
+    //         $transaction = new Transaction();
+    //         $transaction->productId = $newProduct->productId;
+    //         $transaction->supplierId = $newProduct->supplierId;
+    //         $transaction->description = $newProduct->description;
+    //         $transaction->qty = $newProduct->qty;
+    //         $transaction->approved_by = $newProduct->approved_by;
 
-            $transactionSaved = $transaction->save();
+    //         $transactionSaved = $transaction->save();
 
-            if (!$transactionSaved) {
-                $newProduct->delete();
-                return response()->json(['success' => false, 'message' => 'Failed to create transaction']);
-            }
-        }
-     else {
-        return response()->json(['success' => false, 'message' => 'Failed to create product']);
-    }
+    //         if (!$transactionSaved) {
+    //             $newProduct->delete();
+    //             return response()->json(['success' => false, 'message' => 'Failed to create transaction']);
+    //         }
+    //     }
+    //  else {
+    //     return response()->json(['success' => false, 'message' => 'Failed to create product']);
+    // }
 }
 
     public function uploadImage(Request $request) {
@@ -86,11 +86,30 @@ class ProductController extends Controller{
         $product->qty = $request->prodPayload["qty"];
         $product->description = $request->prodPayload["description"];
         $product->status = $request->prodPayload["status"];
+        //$product->approved_by = $request->prodPayload["approved_by"];
+
+       if ($product->status == 1) {
+
+            $transaction = new Transaction();
+            $transaction->productId = $product->productId;
+            $transaction->supplierId = $product->supplierId;
+            $transaction->description = $product->description;
+            $transaction->qty = $product->qty;
+            $transaction->approved_by = $request->prodPayload["approved_by"];
+
+            $transaction->save();
+        }
 
         $product->save();
 
         return $product;
 
+    }
+
+    public function getCategories()
+    {
+        $categories = Categories::all();
+        return response()->json($categories);
     }
 
     public function deleteProduct(Request $request){

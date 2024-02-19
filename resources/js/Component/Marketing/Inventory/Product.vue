@@ -48,9 +48,29 @@
                                 scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-                                {{ product.name }}
+                                {{ product.productName }}
                             </th>
-                            <td class="px-6 py-4">{{ product.cat_code }}</td>
+                            <td class="px-6 py-4">
+                                <!-- <div
+                                    v-for="category in Categories"
+                                    :key="category.categoryiId"
+                                    class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2"
+                                >
+                                    <div
+                                        class="bg-white shadow-md mb-4 category-item hover:bg-gray-100 cursor-pointer p-2 rounded-md"
+                                    >
+                                        <p class="">
+                                            {{ category.categoryName }}
+                                        </p>
+                                    </div>
+                                </div> -->
+                                <!-- {{ getCategoryName(product.categoryId) }} -->
+                                {{
+                                    product.category
+                                        ? product.category.categoryName
+                                        : "NA"
+                                }}
+                            </td>
                             <td class="px-6 py-4">{{ product.item_code }}</td>
                             <td class="px-6 py-4">{{ product.supplier }}</td>
                             <td class="px-6 py-4">{{ product.price }}</td>
@@ -154,7 +174,7 @@
 <script>
 import Modal from "@/Component/Modal.vue";
 import editProduct from "@/Component/Marketing/inventory/editProduct.vue";
-// // import addProduct from "@/Component/ProdComp/addProduct.vue";
+
 // import addReturn from "@/Component/ProdComp/addReturn.vue";
 
 import axios from "axios";
@@ -162,7 +182,6 @@ export default {
     components: {
         Modal,
         editProduct,
-        // addReturn,
     },
     data() {
         return {
@@ -176,9 +195,10 @@ export default {
                 price: "",
                 qty: "",
                 description: "",
-                status: "",
+                status: 0,
             },
             products: [],
+            categories: [],
             editingProductId: null,
             modalStatus: false,
         };
@@ -205,21 +225,17 @@ export default {
             });
         },
 
-        getProducts(status = null) {
-            let params = {};
-            if (status === "0") {
-                params.status = 0;
-            } else if (status === "1") {
-                params.status = 1;
-            }
-            axios
-                .get("/get-products", { params })
-                .then(({ data }) => {
-                    this.products = data;
-                })
-                .catch((error) => {
-                    console.error("Error fetching products:", error);
-                });
+        getCategoryName(categoryId) {
+            const category = this.categories.find(
+                (cat) => cat.categoryId === categoryId
+            );
+            return category ? category.categoryName : this.categoryName;
+        },
+
+        getCategories() {
+            axios.get("/get-categories").then(({ data }) => {
+                this.categories = data;
+            });
         },
 
         editProduct(product) {
@@ -227,7 +243,6 @@ export default {
             this.editingProductId = product.id;
             this.modalContent.title = "Edit Product";
             this.modalStatus = true;
-            // this.getProducts();
         },
 
         updateProduct() {
@@ -279,6 +294,7 @@ export default {
         this.getProducts();
         this.getApprovedProducts();
         this.getPendingProducts();
+        this.getCategories();
     },
 };
 </script>

@@ -52,6 +52,7 @@ Route::post("/update-product", [ProductController::class, 'updateProduct']);
 Route::post("/delete-product", [ProductController::class, 'deleteProduct']);
 Route::post("/upload-image", [ProductController::class, 'uploadImage']);
 Route::post("/return-product", [ProductController::class, 'returnProduct'])->name("returnProduct");
+Route::get("/get-categories", [ProductController::class, 'getCategories']);
 
 // // Route for fetching pending products
 // Route::get('/get-pending-products', [ProductController::class, 'getPendingProducts']);

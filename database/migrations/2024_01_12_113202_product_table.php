@@ -24,6 +24,7 @@ return new class extends Migration
             $table->float('qty')->nullable();
             $table->text('description')->nullable();
             $table->boolean('status')->default('0'); //0 pending 1 accept  2 reject
+            $table->unsignedBigInteger('approved_by')->nullable()->after('status');
             $table->timestamps();
         });
     }

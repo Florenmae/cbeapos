@@ -149,15 +149,15 @@
             </div>
             <div class="col-span-4">
                 <label
-                    for="description"
+                    for="approved_by"
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >Description</label
+                    >Approved By:</label
                 >
-                <textarea
-                    v-model="editProduct.description"
+                <input
+                    v-model="editProduct.approved_by"
                     type="text"
-                    name="description"
-                    id="description"
+                    name="approved_by"
+                    id="approved_by"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 />
             </div>
@@ -174,7 +174,7 @@ export default {
     },
     data() {
         return {
-            editingProductId: this.product.id,
+            editingProductId: this.product.productId,
             editProduct: {
                 item_code: "",
                 categoryId: "",
@@ -185,6 +185,7 @@ export default {
                 qty: "",
                 description: "",
                 status: 0,
+                approved_by: "",
             },
         };
     },
@@ -198,25 +199,16 @@ export default {
         },
     },
     methods: {
-        // updateProduct() {
-        //     const { editProduct, editingProductId } = this;
-        //     const prodPayload = { ...editProduct };
-
-        //     axios
-        //         .post("/update-product", { prodPayload, editingProductId })
-        //         .then(({ data }) => {
-        //             if (prodPayload.status === "1") {
-        //                 this.getProducts();
-        //             }
-        //         });
-        // },
         updateProduct() {
             const { editProduct, editingProductId } = this;
             const prodPayload = { ...editProduct };
 
             axios
                 .post("/update-product", { prodPayload, editingProductId })
-                .then(({ data }) => {})
+                .then(({ data }) => {
+                    prodPayload.approved_by = this.approved_by;
+                    window.location.reload("Reloading");
+                })
                 .catch((error) => {
                     console.error("Error updating product:", error);
                 });
