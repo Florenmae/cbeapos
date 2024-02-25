@@ -147,7 +147,7 @@ class ProductController extends Controller{
     }
 
     public function ReturnAll(Request $request){
-        $returnedProduct = Product::find($request->editingProductId);
+        $returnedProduct = Product::find($request->product['productId']);
 
         ReturnedProduct::create([
             'name' => $returnedProduct->productId,

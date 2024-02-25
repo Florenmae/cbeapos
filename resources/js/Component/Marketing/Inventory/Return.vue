@@ -177,19 +177,7 @@ export default {
                     console.error("Error updating product:", error);
                 });
         },
-        returnProduct() {
-            const { editProduct, editingProductId } = this;
-            const prodPayload = { ...editProduct };
 
-            axios
-                .post("/returnAll-product", { prodPayload, editingProductId })
-                .then(({ data }) => {
-                    window.location.reload("Reloading");
-                })
-                .catch((error) => {
-                    console.error("Error updating product:", error);
-                });
-        },
         getProducts() {
             axios.get("/get-products").then(({ data }) => {
                 this.products = data;

@@ -50,7 +50,9 @@
                             >
                                 {{ product.productName }}
                             </th>
-                            <td class="px-6 py-4"></td>
+                            <td class="px-6 py-4">
+                                <p>{{ getCategoryName(product.categoryId) }}</p>
+                            </td>
                             <td class="px-6 py-4">{{ product.item_code }}</td>
                             <td class="px-6 py-4">{{ product.supplier }}</td>
                             <td class="px-6 py-4">{{ product.price }}</td>
@@ -62,13 +64,12 @@
                             >
                                 <editProduct :product="product" />
                                 <Approve :product="product" />
-                                <!-- <button
+                                <button
                                     class="bg-red-500 px-2 py-2 rounded-md text-white my-2 text-sm hover:bg-green-600"
-                                    @click="product.productId;"
+                                    @click="returnAll(product)"
                                 >
                                     Return
-                                </button> -->
-                                <Return :product="product" />
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -138,11 +139,11 @@
                                 <editProduct :product="product" />
                                 <button
                                     class="bg-red-500 px-2 py-2 rounded-md text-white my-2 text-sm hover:bg-green-600"
-                                    @click="deleteProduct(product.productId)"
+                                    @click="product.productId;"
                                 >
                                     Return
                                 </button>
-                                <addReturn :product="product" />
+                                <Return :product="product" />
                             </td>
                         </tr>
                     </tbody>
@@ -245,25 +246,34 @@ export default {
                 });
         },
 
+        // returnAll(product) {
+        //     const { editProduct, editingProductId } = this;
+        //     const prodPayload = { ...editProduct };
+
+        //     axios
+        //         .post("/returnAll-product", { prodPayload, editingProductId })
+        //         .then(({ data }) => {
+        //             window.location.reload("Reloading");
+        //         })
+        //         .catch((error) => {
+        //             console.error("Error updating product:", error);
+        //         });
+        // },
+        returnAll(product) {
+            axios
+                .post("/returnAll-product", { product })
+                .then(({ data }) => {
+                    window.location.reload("Reloading");
+                })
+                .catch((error) => {
+                    console.error("Error returning all products:", error);
+                });
+        },
+
         deleteProduct(productId) {
             axios.post("/delete-product", { productId }).then(({ data }) => {
                 this.getProducts();
             });
-        },
-
-        returnProduct(data) {
-            const { editProduct, editingProductId } = this;
-            const prodPayload = { ...editProduct };
-
-            axios
-                .post("/return-product", { prodPayload, editingProductId })
-                .then(({ data }) => {
-                    this.getProducts();
-                    this.changeModalStatus();
-                })
-                .catch((error) => {
-                    console.error("Error updating product:", error);
-                });
         },
     },
     computed: {
