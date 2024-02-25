@@ -128,12 +128,10 @@ class ProductController extends Controller{
         }
         $returnedQty = (int)$request->prodPayload["qty"];
 
-
     if ($returnedQty >= $returnedProduct->qty) {
         $returnedProduct->delete();
     } else {
         $returnedProduct->qty = $returnedProduct->qty - $returnedQty;
-        // dd($returnedProduct);
         $returnedProduct->save();
     }
 
@@ -146,6 +144,21 @@ class ProductController extends Controller{
         ]);
 
         $res = $returnedProduct->save();
+    }
+
+    public function ReturnAll(Request $request){
+        $returnedProduct = Product::find($request->editingProductId);
+
+        ReturnedProduct::create([
+            'name' => $returnedProduct->productId,
+            'supplier' => $returnedProduct->supplierId,
+            'qty' => $returnedProduct->qty,
+            'description' => $returnedProduct->description,
+
+        ]);
+
+        $res = $returnedProduct->save();
+        $returnedProduct->delete();
     }
 }
 

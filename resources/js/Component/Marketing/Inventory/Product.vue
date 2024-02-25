@@ -50,27 +50,7 @@
                             >
                                 {{ product.productName }}
                             </th>
-                            <td class="px-6 py-4">
-                                <!-- <div
-                                    v-for="category in Categories"
-                                    :key="category.categoryiId"
-                                    class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2"
-                                >
-                                    <div
-                                        class="bg-white shadow-md mb-4 category-item hover:bg-gray-100 cursor-pointer p-2 rounded-md"
-                                    >
-                                        <p class="">
-                                            {{ category.categoryName }}
-                                        </p>
-                                    </div>
-                                </div> -->
-                                <!-- {{ getCategoryName(product.categoryId) }} -->
-                                {{
-                                    product.category
-                                        ? product.category.categoryName
-                                        : "NA"
-                                }}
-                            </td>
+                            <td class="px-6 py-4"></td>
                             <td class="px-6 py-4">{{ product.item_code }}</td>
                             <td class="px-6 py-4">{{ product.supplier }}</td>
                             <td class="px-6 py-4">{{ product.price }}</td>
@@ -81,13 +61,14 @@
                                 class="px-6 py-4 flex justify-center items-center space-x-2"
                             >
                                 <editProduct :product="product" />
-                                <button
+                                <Approve :product="product" />
+                                <!-- <button
                                     class="bg-red-500 px-2 py-2 rounded-md text-white my-2 text-sm hover:bg-green-600"
-                                    @click="deleteProduct(product.productId)"
+                                    @click="product.productId;"
                                 >
-                                    Delete
-                                </button>
-                                <addReturn :product="product" />
+                                    Return
+                                </button> -->
+                                <Return :product="product" />
                             </td>
                         </tr>
                     </tbody>
@@ -159,7 +140,7 @@
                                     class="bg-red-500 px-2 py-2 rounded-md text-white my-2 text-sm hover:bg-green-600"
                                     @click="deleteProduct(product.productId)"
                                 >
-                                    Delete
+                                    Return
                                 </button>
                                 <addReturn :product="product" />
                             </td>
@@ -174,14 +155,17 @@
 <script>
 import Modal from "@/Component/Modal.vue";
 import editProduct from "@/Component/Marketing/inventory/editProduct.vue";
-
-// import addReturn from "@/Component/ProdComp/addReturn.vue";
+import Approve from "@/Component/Marketing/inventory/Approve.vue";
+import Return from "@/Component/Marketing/inventory/Return.vue";
 
 import axios from "axios";
+
 export default {
     components: {
         Modal,
         editProduct,
+        Approve,
+        Return,
     },
     data() {
         return {
